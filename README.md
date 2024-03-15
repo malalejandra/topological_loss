@@ -1,2 +1,4 @@
 # topoloss
-Topological loss function based on persistent homology calculation.
+Topological loss function for image denoising based on persistent homology calculation.
+
+
