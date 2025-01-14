@@ -1,8 +1,4 @@
 import sys,os
-
-#os.environ['LD_LIBRARY_PATH'] +=  f"{os.pathsep + os.environ['CONDA_PREFIX']+'/lib'}"
-
-#print(os.environ['LD_LIBRARY_PATH'])
 import random
 import argparse
 import collections
@@ -15,15 +11,6 @@ import model.model as module_arch
 from parse_config import ConfigParser
 from trainer import Trainer,TrainerGAN
 from utils import prepare_device
-#from torch.cuda.amp import GradScaler
-
-# https://towardsdatascience.com/i-am-so-done-with-cuda-out-of-memory-c62f42947dca
-
-#scaler = GradScaler()
-
-
-# from pathlib import Path
-
 from functools import partial
 
 
@@ -32,7 +19,7 @@ from functools import partial
 
 
 def main(config):
-    # fix random seeds for reproducibility
+
     SEED = config["trainer"]["seed"]
 
     torch.backends.cudnn.deterministic = True
@@ -70,13 +57,12 @@ def main(config):
 
     else:
         pass
-    # print(f"mod config d_ids: {config['arch']['args']['device_ids']}")
+
     model = config.init_obj("arch", module_arch)
     if not is_gan:
         model = torch.jit.script(model)
 
 
-    #    device, device_ids = prepare_device(config['n_gpu'])
     if is_gan:
         model.criterionL1 = config.init_ftn("loss", module_loss)
         netG = config["arch"]["args"]["netG"]
@@ -106,8 +92,7 @@ def main(config):
         optimizer = None
         lr_scheduler = None
       
-        
-   # print("CRITERION:",criterion)
+ 
     # metric params are acquired from dataloader params
     metrics = [
         partial(
